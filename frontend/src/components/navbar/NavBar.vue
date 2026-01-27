@@ -29,7 +29,9 @@ import SearchIcon from "@/components/navbar/icons/SearchIcon.vue";
         </div>
       </div>
       <div class="navbar-end">
-        <button class="btn btn-ghost text-lg">Login</button>
+        <RouterLink :to="{name: 'login-index'}" active-class="btn-active" class="btn btn-ghost text-lg">
+          Login
+        </RouterLink>
       </div>
     </nav>
     <slot></slot>
@@ -40,22 +42,22 @@ import SearchIcon from "@/components/navbar/icons/SearchIcon.vue";
     <div class="flex min-h-full flex-col items-start bg-base-200 is-drawer-close:w-16 is-drawer-open:w-54">
       <ul class="menu w-full grow">
         <li>
-          <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-3" data-tip="Homepage">
+          <RouterLink :to="{name: 'homepage-index'}" active-class="menu-focus" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-3" data-tip="Homepage">
             <HomepageIcon />
             <span class="is-drawer-close:hidden text-base ml-2 whitespace-nowrap">Homepage</span>
-          </button>
+          </RouterLink>
         </li>
         <li>
-          <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-3" data-tip="Friend">
+          <RouterLink :to="{name: 'friend-index'}" active-class="menu-focus" class="is-drawer-close:tooltip-right py-3" data-tip="Friend">
             <FriendIcon />
             <span class="is-drawer-close:hidden text-base ml-2 whitespace-nowrap">Friend</span>
-          </button>
+          </RouterLink>
         </li>
         <li>
-          <button class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-3" data-tip="Create">
+          <RouterLink :to="{name: 'create-index'}" active-class="menu-focus" class="is-drawer-close:tooltip is-drawer-close:tooltip-right py-3" data-tip="Create">
             <CreateIcon />
             <span class="is-drawer-close:hidden text-base ml-2 whitespace-nowrap">Create</span>
-          </button>
+          </RouterLink>
         </li>
       </ul>
     </div>
