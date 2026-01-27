@@ -9,15 +9,15 @@ from web.models.user import UserProfile
 class RegisterView(APIView):
     def post(self, request):
         try:
-            username = request.date['username'].strip()
-            password = request.date['password'].strip()
+            username = request.data['username'].strip()
+            password = request.data['password'].strip()
             if not username or not password:
                 return Response({
-                    'result': 'username and password are required',
+                    'result': 'username and password is required',
                 })
             if User.objects.filter(username=username).exists():
                 return Response({
-                    'result': 'username already exists',
+                    'result': 'user is exist',
                 })
             user = User.objects.create_user(username=username, password=password)
             user_profile = UserProfile.objects.create(user=user)
@@ -27,7 +27,7 @@ class RegisterView(APIView):
                 'access': str(refresh.access_token),
                 'user_id': user.id,
                 'username': user.username,
-                'photo': user_profile.photo.url,
+                'photo': user_profile.photo.url,  # 必须加url！！！
                 'profile': user_profile.profile,
             })
             response.set_cookie(
@@ -41,5 +41,5 @@ class RegisterView(APIView):
             return response
         except:
             return Response({
-                'result': 'error, please try again later',
+                'result': 'system error',
             })

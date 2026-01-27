@@ -3,15 +3,16 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
+
 class RefreshTokenView(APIView):
     def post(self, request):
         try:
-            refresh_token = request.COOKIES['refresh_token']
+            refresh_token = request.COOKIES.get('refresh_token')
             if not refresh_token:
                 return Response({
-                    'result': 'refresh token doesn\'t exist',
-                }, status=401)
-            refresh = RefreshToken(refresh_token) #如果refresh token expired 異常
+                    'result': 'refresh token not found',
+                }, status=401)  # 必须加401
+            refresh = RefreshToken(refresh_token)  # 如果refresh token过期了，会报异常
             if settings.SIMPLE_JWT['ROTATE_REFRESH_TOKENS']:
                 refresh.set_jti()
                 response = Response({
@@ -28,10 +29,10 @@ class RefreshTokenView(APIView):
                 )
                 return response
             return Response({
-                'result': 'access',
+                'result': 'success',
                 'access': str(refresh.access_token),
             })
         except:
             return Response({
-                'result': 'fresh token expired',
-            }, status=401)
+                'result': "refresh token is invalid",
+            }, status=401)  # 必须加401
