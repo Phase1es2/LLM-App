@@ -12,7 +12,6 @@ const user = useUserStore()
 const router = useRouter()
 
 async function handleLogin() {
-  console.log("Submit Data:", username.value, password.value);
   errorMessage.value = ''
   if (!username.value.trim()) {
     errorMessage.value = 'username is required'
