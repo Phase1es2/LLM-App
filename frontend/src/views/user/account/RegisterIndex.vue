@@ -28,7 +28,7 @@ async function handleRegister() {
       })
       const data = res.data
       if (data.result === 'success') {
-        user.setAccessToken(data.success)
+        user.setAccessToken(data.access)
         user.setUserInfo(data)
         await router.push({
           name: 'homepage-index'
