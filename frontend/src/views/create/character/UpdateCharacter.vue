@@ -24,12 +24,10 @@ onMounted(async () => {
       }
     })
     const data = res.data
-    console.log('get_single data =', res.data)
     if (data.result === 'success') {
       character.value = data.character
     }
   } catch (err) {
-    console.log(err)
   }
 })
 
@@ -82,7 +80,6 @@ async function handleUpdate() {
         errorMessage.value = data.result
       }
     } catch (err) {
-      console.log(err)
     }
   }
 }
