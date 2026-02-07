@@ -23,4 +23,4 @@ defineExpose({
 
 <style scoped>
 
-</style>。
+</style>
