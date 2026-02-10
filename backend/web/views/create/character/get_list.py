@@ -19,7 +19,6 @@ class GetListCharacterView(APIView):
         try:
             items_count: int = int(request.query_params.get('items_count'))
             user_id: int = int(request.query_params.get('user_id'))
-            print(user_id)
             user = User.objects.get(id=user_id)
             user_profile = UserProfile.objects.get(user=user)
             characters_raw = Character.objects.filter(
@@ -43,8 +42,6 @@ class GetListCharacterView(APIView):
                         'photo': author.photo.url,
                     }
                 })
-
-            print(len(characters))
             return Response({
                 'result': 'success',
                 'user_profile': {
