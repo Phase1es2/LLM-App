@@ -28,7 +28,6 @@ class GetListCharacterView(APIView):
             # database's item  cant not just return raw
             # serialization way need to self define
             for character in characters_raw:
-                print(character)
                 author = character.author
                 characters.append({
                     'id': character.id,
