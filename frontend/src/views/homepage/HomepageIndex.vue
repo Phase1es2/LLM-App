@@ -1,5 +1,5 @@
 <script setup>
-import {nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef} from "vue";
+import {nextTick, onBeforeUnmount, onMounted, ref, useTemplateRef, watch} from "vue";
 import {useRoute} from "vue-router";
 import api from "@/js/http/api.js";
 import Character from "@/components/character/Character.vue";
@@ -10,6 +10,7 @@ const isLoading = ref(false)
 const hasCharacter = ref(true)
 const sentinelRef = useTemplateRef('sentinel-ref')
 const route = useRoute()
+
 
 function checkSentinelVisible() {  // 判断哨兵是否能被看到
   if (!sentinelRef.value) return false
@@ -28,10 +29,10 @@ async function loadMore() {
     const res = await api.get('/api/homepage/index/', {
       params: {
         items_count: characters.value.length,
+        search_query: route.query.q || '',
       }
     })
     const data = res.data
-    console.log(data)
     if (data.result === 'success') {
       newCharacters = data.characters  // 這裡需要match BE
     }
@@ -76,6 +77,16 @@ function removeCharacter(characterId) {
   characters.value = characters.value.filter(c => c.id !== characterId)
 }
 
+function reset() {
+  characters.value = []
+  isLoading.value = false
+  hasCharacter.value = true
+  loadMore()
+}
+
+watch(() => route.query.q, newQ => {
+  reset()
+})
 
 onBeforeUnmount( () => {
   observer?.disconnect()
