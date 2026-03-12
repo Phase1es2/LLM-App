@@ -14,6 +14,7 @@ class ChatGraph:
             model='qwen3.5-plus',
             openai_api_key=os.getenv('API_KEY'),
             openai_api_base=os.getenv('API_BASE'),
+            extra_body={"enable_thinking": False},
             streaming=True,
             model_kwargs={
                 'stream_options': {
