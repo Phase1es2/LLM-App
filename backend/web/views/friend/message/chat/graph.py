@@ -2,13 +2,17 @@ import os
 from pprint import pprint
 from typing import TypedDict, Annotated, Sequence
 
+import lancedb
 from django.utils.timezone import localtime, now
+from langchain_community.vectorstores import LanceDB
 from langchain_core.messages import BaseMessage
 from langchain_core.tools import tool
 from langchain_openai import ChatOpenAI
 from langgraph.constants import START, END
 from langgraph.graph import add_messages, StateGraph
 from langgraph.prebuilt import ToolNode
+
+from web.documents.utils.custom_embedding import CustomEmbeddings
 
 
 class ChatGraph:
@@ -18,8 +22,22 @@ class ChatGraph:
         def get_time() -> str:
             """Get the current exact time. The returned format is: YYYY-MM-DD HH:MM:SS"""
             return localtime(now()).strftime("%Y-%m-%d %H:%M:%S")
+        @tool
+        def search_knowledge_base(query: str) -> str:
+            """When the user searches for information related to 阿里云百炼平台, this function should be called. The input is the user's query question, and the output is the retrieved search result."""
+            db = lancedb.connect('./web/documents/lancedb_storage')
+            embeddings = CustomEmbeddings()
+            vector_db = LanceDB(
+                connection=db,
+                embedding=embeddings,
+                table_name='my_knowledge_base',
+            )
+            docs = vector_db.similarity_search(query, k=3)
 
-        tools = [get_time]
+            context = '\n\n'.join([f'chunk: {i + 1}\n{doc.page_content}' for i, doc in enumerate(docs)])
+            return f'From knowledge base:\n\n{context}\n'
+
+        tools = [get_time, search_knowledge_base]
         llm = ChatOpenAI(
             model='qwen3.5-plus',
             openai_api_key=os.getenv('API_KEY'),

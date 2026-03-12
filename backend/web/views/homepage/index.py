@@ -10,7 +10,6 @@ class HomepageIndexView(APIView):
         try:
             items_count = int(request.query_params.get('items_count', 0))
             search_query = request.query_params.get('search_query', '').strip()
-            print(items_count, search_query)
             if search_query:
                 queryset = Character.objects.filter(
                     Q(name__icontains=search_query) | Q(profile__icontains=search_query)
