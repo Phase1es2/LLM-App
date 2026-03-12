@@ -11,9 +11,15 @@ class ChatGraph:
     @staticmethod
     def create_app():
         llm = ChatOpenAI(
-            model = 'deepseek-v3.2',
-            openai_api_key = os.getenv('API_KEY'),
-            openai_api_base = os.getenv('API_BASE'),
+            model='qwen3.5-plus',
+            openai_api_key=os.getenv('API_KEY'),
+            openai_api_base=os.getenv('API_BASE'),
+            streaming=True,
+            model_kwargs={
+                'stream_options': {
+                    'include_usage': True,
+                }
+            }
         )
 
         class AgentState(TypedDict):
@@ -29,4 +35,4 @@ class ChatGraph:
         graph.add_edge(START, 'agent')
         graph.add_edge('agent', END)
 
-        return graph.compile() # return app
+        return graph.compile()
